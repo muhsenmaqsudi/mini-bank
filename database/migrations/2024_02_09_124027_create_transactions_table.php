@@ -1,5 +1,6 @@
 <?php
 
+use App\ValueObjects\TransactionType;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -15,7 +16,7 @@ return new class extends Migration
             $table->id();
             $table->uuid('track_id')->unique();
             $table->foreignId('card_id')->constrained('cards');
-            $table->enum('type', ['transfer', 'refund']);
+            $table->enum('type', TransactionType::values());
             $table->decimal('amount', 64, 0);
             $table->boolean('is_refunded')->default(false);
             $table->timestamps();

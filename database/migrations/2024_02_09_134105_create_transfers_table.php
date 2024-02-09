@@ -1,5 +1,6 @@
 <?php
 
+use App\ValueObjects\TransferType;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -14,10 +15,10 @@ return new class extends Migration
         Schema::create('transfers', function (Blueprint $table) {
             $table->id();
             $table->foreignId('txn_id')->constrained('transactions');
-            $table->foreignId('sender_id')->constrained('accounts');
-            $table->foreignId('receiving_id')->constrained('accounts');
+            $table->string('sender_id');
+            $table->string('receiving_id');
             $table->decimal('amount', 64, 0);
-            $table->enum('type', ['deposit', 'withdraw']);
+            $table->enum('type', TransferType::values());
             $table->timestamps();
         });
     }
