@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\V1\AccountTransferController;
+use App\Http\Middleware\SanitizeNumbers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -20,4 +21,4 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::post('accounts/transfer', AccountTransferController::class);
+Route::post('accounts/transfer', AccountTransferController::class)->middleware(SanitizeNumbers::class);
