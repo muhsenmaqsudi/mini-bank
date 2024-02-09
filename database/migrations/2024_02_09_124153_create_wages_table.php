@@ -11,12 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('accounts', function (Blueprint $table) {
+        Schema::create('wages', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained('users');
-            $table->enum('type', ['master', 'normal']);
-            $table->string('account_no')->index();
-            $table->decimal('balance', 64, 0)->default(0);
+            $table->foreignId('txn_id')->constrained('transactions');
+            $table->decimal('fee', 10, 0);
             $table->timestamps();
         });
     }
@@ -26,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('accounts');
+        Schema::dropIfExists('wages');
     }
 };

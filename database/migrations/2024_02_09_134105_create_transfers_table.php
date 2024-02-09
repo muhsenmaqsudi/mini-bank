@@ -11,12 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('accounts', function (Blueprint $table) {
+        Schema::create('transfers', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained('users');
-            $table->enum('type', ['master', 'normal']);
-            $table->string('account_no')->index();
-            $table->decimal('balance', 64, 0)->default(0);
+            $table->foreignId('txn_id')->constrained('transactions');
+            $table->foreignId('sender_id')->constrained('accounts');
+            $table->foreignId('receiving_id')->constrained('accounts');
+            $table->decimal('amount', 64, 0);
+            $table->enum('type', ['deposit', 'withdraw']);
             $table->timestamps();
         });
     }
@@ -26,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('accounts');
+        Schema::dropIfExists('transfers');
     }
 };
