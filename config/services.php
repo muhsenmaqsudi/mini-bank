@@ -32,9 +32,13 @@ return [
     ],
 
     'kavenegar' => [
-        'base_url' => env('KAVENEGAR_URL', 'https://api.kavenegar.com'),
         'api_key' => env('KAVENEGAR_API_KEY'),
-        'sender' => env('KAVENEGAR_SENDER', '2000500666'),
+        'line_number' => env('KAVENEGAR_LINE_NUMBER', '2000500666'),
+    ],
+
+    'ghasedak' => [
+        'api_key' => env('GHASEDAK_API_KEY'),
+        'line_number' => env('GHASEDAK_LINE_NUMBER', '10008566'),
     ],
 
 ];

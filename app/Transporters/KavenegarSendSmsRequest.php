@@ -16,7 +16,7 @@ class KavenegarSendSmsRequest extends Request
         parent::__construct($http);
 
         $this->setPath(sprintf($this->path, config('services.kavenegar.api_key')));
-        $this->query['sender'] = config('services.kavenegar.sender');
+        $this->query['sender'] = config('services.kavenegar.line_number');
     }
 
     public function fake(?bool $isFailed = false): Collection
