@@ -3,7 +3,8 @@
 namespace App\Providers;
 
 use App\Events\SuccessfulTransferOccurred;
-use App\Listeners\SendTransferNotification;
+use App\Listeners\ReceiverTransferNotification;
+use App\Listeners\SenderTransferNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 
 class EventServiceProvider extends ServiceProvider
@@ -15,7 +16,8 @@ class EventServiceProvider extends ServiceProvider
      */
     protected $listen = [
         SuccessfulTransferOccurred::class => [
-            SendTransferNotification::class,
+            SenderTransferNotification::class,
+            ReceiverTransferNotification::class,
         ]
     ];
 

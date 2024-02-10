@@ -2,8 +2,8 @@
 
 namespace App\Providers;
 
-use App\Notifications\Channels\Sms\Kavenegar;
-use App\Notifications\SmsChannel;
+use App\Notifications\Supplier;
+use App\Notifications\Suppliers\Kavenegar;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -21,6 +21,6 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        $this->app->bind(SmsChannel::class, Kavenegar::class);
+        $this->app->bind(Supplier::class, Kavenegar::class);
     }
 }

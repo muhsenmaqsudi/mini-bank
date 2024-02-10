@@ -6,9 +6,11 @@ use App\Events\SuccessfulTransferOccurred;
 use App\Models\Account;
 use App\Notifications\Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Queue\InteractsWithQueue;
 
-class SendTransferNotification implements ShouldQueue
+class ReceiverTransferNotification implements ShouldQueue
 {
+    use InteractsWithQueue;
     /**
      * Create the event listener.
      */
@@ -24,9 +26,8 @@ class SendTransferNotification implements ShouldQueue
     {
         /** @var Account $receivingAccount */
         $receivingAccount = Account::query()->find(id: $event->transferable->getReceivingAccount());
-        /** @var Account $senderAccount */
-        $senderAccount = Account::query()->find(id: $event->transferable->getSenderAccount());
-        $this->notification
+
+        $result = $this->notification
             ->to($receivingAccount->user->mobile)
             ->withMessage(
                 __('notification.transfers.deposit', [
@@ -36,14 +37,8 @@ class SendTransferNotification implements ShouldQueue
             )
             ->send();
 
-        $this->notification
-            ->to($senderAccount->user->mobile)
-            ->withMessage(
-                __('notification.transfers.withdraw', [
-                    'amount' => $event->transferable->amount,
-                    'card_no' => $event->transferable->senderCard,
-                ])
-            )
-            ->send();
+        if (! $result['is_done']) {
+            $this->job->fail();
+        }
     }
 }

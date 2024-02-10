@@ -7,7 +7,7 @@ class Notification
     private string $receiver;
     private string $message;
 
-    public function __construct(private readonly SmsChannel $channel)
+    public function __construct(private readonly Supplier $channel)
     {
     }
 
@@ -23,8 +23,8 @@ class Notification
         return $this;
     }
 
-    public function send(): void
+    public function send(): array
     {
-        $this->channel->send($this->receiver, $this->message);
+        return $this->channel->send($this->receiver, $this->message);
     }
 }
