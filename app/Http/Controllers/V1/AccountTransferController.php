@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\V1;
 
+use App\Events\SuccessfulTransferOccurred;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\V1\AccountTransferRequest;
 use App\Models\Card;
@@ -25,6 +26,8 @@ class AccountTransferController extends Controller
         $transaction = DB::transaction(function () use ($transferable) {
             /** @var Card $senderCard */
             $senderCard = Card::query()->where('card_no', $transferable->senderCard)->first();
+
+            $transferable->setSenderAccount($senderCard->account_id);
 
             if ($transferable->amount <= $senderCard->account->balance) {
                 /** @var Transaction $txn */
@@ -59,6 +62,8 @@ class AccountTransferController extends Controller
                 /** @var Card $receivingCard */
                 $receivingCard = Card::query()->where('card_no', $transferable->receivingCard)->first();
 
+                $transferable->setReceivingAccount($receivingCard->account_id);
+
                 $receivingCard->account->update([
                     'balance' => (int)$receivingCard->account->balance + $transferable->amount
                 ]);
@@ -66,6 +71,8 @@ class AccountTransferController extends Controller
                 return $txn;
             };
         });
+
+        SuccessfulTransferOccurred::dispatch($transferable);
 
         return response()->json([
             'status' => true,

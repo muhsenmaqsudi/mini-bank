@@ -16,6 +16,7 @@ use Illuminate\Database\Eloquent\Relations\HasManyThrough;
  * @property string $account_no
  * @property string $balance
  * @property Collection $transactions
+ * @property User $user
  */
 class Account extends Model
 {

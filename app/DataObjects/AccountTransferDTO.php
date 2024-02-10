@@ -3,10 +3,14 @@
 namespace App\DataObjects;
 
 use App\Http\Requests\V1\AccountTransferRequest;
+use App\Models\Card;
 use App\ValueObjects\AccountType;
 
 class AccountTransferDTO
 {
+    private string $receivingAccount;
+    private string $senderAccount;
+
     public function __construct(
         public readonly string $senderCard,
         public readonly string $receivingCard,
@@ -32,5 +36,25 @@ class AccountTransferDTO
             'amount' => $this->amount,
             'type' => $this->type->value,
         ];
+    }
+
+    public function getReceivingAccount(): string
+    {
+        return $this->receivingAccount;
+    }
+
+    public function setReceivingAccount(string $receivingAccount): void
+    {
+        $this->receivingAccount = $receivingAccount;
+    }
+
+    public function getSenderAccount(): string
+    {
+        return $this->senderAccount;
+    }
+
+    public function setSenderAccount(string $senderAccount): void
+    {
+        $this->senderAccount = $senderAccount;
     }
 }
