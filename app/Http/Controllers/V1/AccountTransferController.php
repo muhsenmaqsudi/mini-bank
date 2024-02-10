@@ -2,30 +2,33 @@
 
 namespace App\Http\Controllers\V1;
 
-use App\Events\SuccessfulTransferOccurred;
 use App\Features\AccountTransferFeature;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\V1\AccountTransferRequest;
 use App\Http\Responses\V1\AccountTransferResponse;
-use App\Models\Card;
-use App\Models\Transaction;
-use App\ValueObjects\TransactionType;
-use App\ValueObjects\TransferType;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Str;
+use App\Http\Responses\V1\ErrorResponse;
+use Illuminate\Contracts\Support\Responsable;
 
 class AccountTransferController extends Controller
 {
     /**
      * Handle the incoming request.
      */
-    public function __invoke(AccountTransferRequest $request, AccountTransferFeature $feature): AccountTransferResponse
+    public function __invoke(AccountTransferRequest $request, AccountTransferFeature $feature): Responsable
     {
-        $transaction = $feature->handle($request->toDTO());
+        try {
+            $transaction = $feature->handle($request->toDTO());
 
-        return new AccountTransferResponse(
-            trackId: $transaction->track_id,
-            message: 'The transfer is successful'
-        );
+            return new AccountTransferResponse(
+                trackId: $transaction->track_id,
+                message: 'The transfer is successful'
+            );
+        } catch (\Throwable $th) {
+            return new ErrorResponse(
+                message: $th->getMessage(),
+                exception: $th,
+                code: 10030 // TODO: add all error codes
+            );
+        }
     }
 }
