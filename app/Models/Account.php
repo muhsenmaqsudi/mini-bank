@@ -14,7 +14,7 @@ use Illuminate\Database\Eloquent\Relations\HasManyThrough;
  * @property string $user_id
  * @property string $type
  * @property string $account_no
- * @property string $balance
+ * @property int $balance
  * @property Collection $transactions
  * @property User $user
  */
@@ -27,6 +27,10 @@ class Account extends Model
         'type',
         'account_no',
         'balance',
+    ];
+
+    protected $casts = [
+        'balance' => 'int',
     ];
 
     public function user(): BelongsTo

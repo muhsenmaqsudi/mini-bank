@@ -24,7 +24,7 @@ it('is only accepting a 16 number digits for card number', function () {
     $badData = [
         'sender_card' => '1234',
         'receiving_card' => '4321',
-        'amount' => '10000'
+        'amount' => 10000,
     ];
     $response = $this->postJson(route('account.transfer'), $badData);
 
@@ -49,7 +49,7 @@ it('is only accepting a valid format for card number', function () {
     $badData = [
         'sender_card' => '6219861055567722',
         'receiving_card' => '6219861908496644',
-        'amount' => '500000'
+        'amount' => 500000,
     ];
     $response = $this->postJson(route('account.transfer'), $badData);
 
@@ -101,7 +101,7 @@ it('is is doing a successful account transfer', function () {
     $correctData = [
         'sender_card' => '6219861055567746',
         'receiving_card' => '6219861908496622',
-        'amount' => '10000'
+        'amount' => 10000,
     ];
 
     $response = $this->postJson(
@@ -146,7 +146,7 @@ it('is is correctly updating account balance after a successful account transfer
     $correctData = [
         'sender_card' => '6219861055567746',
         'receiving_card' => '6219861908496622',
-        'amount' => '10000'
+        'amount' => 10000,
     ];
 
     /** @var Card $senderCard */
@@ -166,12 +166,10 @@ it('is is correctly updating account balance after a successful account transfer
     $transferWage = 5000;
 
     $this->assertEquals(
-        $senderCardBalance - ((int)$correctData['amount'] + $transferWage),
+        $senderCardBalance - ($correctData['amount'] + $transferWage),
         $senderCard->fresh()->account->balance
     );
 
-    $this->assertEquals(
-        (int)$receivingCardBalance + (int)$correctData['amount'],
-        $receivingCard->fresh()->account->balance
-    );
+    expect($receivingCardBalance + $correctData['amount'])
+        ->toBe($receivingCard->fresh()->account->balance);
 });
