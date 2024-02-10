@@ -25,9 +25,12 @@ class AccountTransferController extends Controller
         /** @var Transaction $transaction */
         $transaction = DB::transaction(function () use ($transferable) {
             /** @var Card $senderCard */
-            $senderCard = Card::query()->where('card_no', $transferable->senderCard)->first();
-
+            $senderCard = Card::query()->where('card_no', $transferable->senderCard)->firstOrFail();
             $transferable->setSenderAccount($senderCard->account_id);
+
+            /** @var Card $receivingCard */
+            $receivingCard = Card::query()->where('card_no', $transferable->receivingCard)->firstOrFail();
+            $transferable->setReceivingAccount($receivingCard->account_id);
 
             if ($transferable->amount <= $senderCard->account->balance) {
                 /** @var Transaction $txn */
@@ -59,13 +62,8 @@ class AccountTransferController extends Controller
                     'balance' => $senderCard->account->balance - $transferable->amount - 5000
                 ]);
 
-                /** @var Card $receivingCard */
-                $receivingCard = Card::query()->where('card_no', $transferable->receivingCard)->first();
-
-                $transferable->setReceivingAccount($receivingCard->account_id);
-
                 $receivingCard->account->update([
-                    'balance' => (int)$receivingCard->account->balance + $transferable->amount
+                    'balance' => $receivingCard->account->balance + $transferable->amount
                 ]);
 
                 return $txn;
