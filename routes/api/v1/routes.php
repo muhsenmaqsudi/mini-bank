@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\V1\AccountTransferController;
+use App\Http\Controllers\V1\TransactionTopUsageController;
 use App\Http\Middleware\SanitizeNumbers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -22,3 +23,4 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::post('accounts/transfer', AccountTransferController::class)->middleware(SanitizeNumbers::class);
+Route::get('transactions/usage', TransactionTopUsageController::class);

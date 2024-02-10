@@ -3,7 +3,10 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
@@ -11,6 +14,7 @@ use Laravel\Sanctum\HasApiTokens;
 /**
  * @property int $id
  * @property string $mobile
+ * @property Collection $accounts
  */
 class User extends Authenticatable
 {
@@ -47,4 +51,20 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+    public function accounts(): HasMany
+    {
+        return $this->hasMany(related: Account::class, foreignKey: 'user_id', localKey: 'id');
+    }
+
+    public function transactions()
+    {
+        $userTransactions = collect();
+
+        $this->accounts()->each(function (Account $account) use (&$userTransactions) {
+            $userTransactions->push(...$account->transactions->toArray());
+        });
+
+        return $userTransactions;
+    }
 }

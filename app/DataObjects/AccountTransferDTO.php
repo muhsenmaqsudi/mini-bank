@@ -2,7 +2,7 @@
 
 namespace App\DataObjects;
 
-use App\Http\Requests\AccountTransferRequest;
+use App\Http\Requests\V1\AccountTransferRequest;
 use App\ValueObjects\AccountType;
 
 class AccountTransferDTO
