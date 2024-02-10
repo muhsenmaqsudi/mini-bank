@@ -22,5 +22,8 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::post('accounts/transfer', AccountTransferController::class)->middleware(SanitizeNumbers::class);
-Route::get('transactions/usage', TransactionTopUsageController::class);
+Route::post('accounts/transfer', AccountTransferController::class)
+    ->middleware(SanitizeNumbers::class)
+    ->name('account.transfer');
+
+Route::get('transactions/usage', TransactionTopUsageController::class)->name('txn.usage');

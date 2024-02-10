@@ -25,7 +25,7 @@ class AccountTransferRequest extends FormRequest
     {
         return [
             'sender_card' => ['required', 'digits:16', new CardNumber(), 'bail'],
-            'receiving_card' => ['required', 'digits:16', new CardNumber(), 'bail'],
+            'receiving_card' => ['required', 'digits:16', 'different:sender_card', new CardNumber(), 'bail'],
             'amount' => 'required|numeric|between:10000,500000000|bail',
         ];
     }
