@@ -22,7 +22,6 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-//        $this->app->bind(Supplier::class, Kavenegar::class);
-        $this->app->bind(Supplier::class, Ghasedak::class);
+        $this->app->bind(Supplier::class, Kavenegar::class);
     }
 }

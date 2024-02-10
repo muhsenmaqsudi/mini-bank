@@ -37,7 +37,7 @@ class ReceiverTransferNotification implements ShouldQueue
             )
             ->send();
 
-        if (! $result['is_done']) {
+        if (! $result->isDone) {
             $this->job->fail();
         }
     }

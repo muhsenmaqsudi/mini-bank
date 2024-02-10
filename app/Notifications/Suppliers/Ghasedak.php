@@ -2,12 +2,13 @@
 
 namespace App\Notifications\Suppliers;
 
+use App\DataObjects\SmsSendResDTO;
 use App\Notifications\Supplier;
 use App\Transporters\GhasedakSendSmsRequest;
 
 class Ghasedak implements Supplier
 {
-    public function send(string $receiver, string $message): array
+    public function send(string $receiver, string $message): SmsSendResDTO
     {
         $response = GhasedakSendSmsRequest::build()
             ->withData([
@@ -18,10 +19,10 @@ class Ghasedak implements Supplier
             ->collect();
 
         $status = $response->get('result')['code'];
-        return [
-            'is_done' => $status == 200,
-            'status' => $status,
-            'message' => $response->get('result')['message'],
-        ];
+
+        return new SmsSendResDTO(
+            status: $status,
+            message: $response->get('result')['message']
+        );
     }
 }

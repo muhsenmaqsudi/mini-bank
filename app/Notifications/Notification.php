@@ -2,6 +2,8 @@
 
 namespace App\Notifications;
 
+use App\DataObjects\SmsSendResDTO;
+
 class Notification
 {
     private string $receiver;
@@ -23,7 +25,7 @@ class Notification
         return $this;
     }
 
-    public function send(): array
+    public function send(): SmsSendResDTO
     {
         return $this->channel->send($this->receiver, $this->message);
     }

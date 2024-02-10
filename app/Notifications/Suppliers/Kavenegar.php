@@ -2,27 +2,27 @@
 
 namespace App\Notifications\Suppliers;
 
+use App\DataObjects\SmsSendResDTO;
 use App\Notifications\Supplier;
 use App\Transporters\KavenegarSendSmsRequest;
 
 class Kavenegar implements Supplier
 {
-
-    public function send(string $receiver, string $message): array
+    public function send(string $receiver, string $message): SmsSendResDTO
     {
         $response = KavenegarSendSmsRequest::build()
             ->withQuery([
                 'receptor' => $receiver,
-                'message' => $message
+                'message' => $message,
             ])
             ->send()
             ->collect();
 
         $status = $response->get('return')['status'];
-        return [
-            'is_done' => $status == 200,
-            'status' => $status,
-            'message' => $response->get('return')['message'],
-        ];
+
+        return new SmsSendResDTO(
+            status: $status,
+            message: $response->get('return')['message']
+        );
     }
 }
